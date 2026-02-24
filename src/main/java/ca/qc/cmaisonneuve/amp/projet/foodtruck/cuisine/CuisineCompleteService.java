@@ -1,6 +1,10 @@
 
 package ca.qc.cmaisonneuve.amp.projet.foodtruck.cuisine;
 
+import java.util.Map;
+
+import ca.qc.cmaisonneuve.amp.projet.foodtruck.food.FoodOptionType;
+
 /**
  * Implémentation de CuisineService qui représente une cuisine complète,
  * c'est-à-dire une cuisine où fours, friteuses et autres éléments chauffants
@@ -8,7 +12,7 @@ package ca.qc.cmaisonneuve.amp.projet.foodtruck.cuisine;
  * Dans le food truck, cette cuisine correspondrait à l'espace de cuisine
  * principal à l'intérieur.
  */
-public class CuisineCompleteService implements CuisineService {
+public class CuisineCompleteService implements CuissonService, AssemblageService {
 
     @Override
     public boolean cuire(String itemType) {
@@ -35,9 +39,14 @@ public class CuisineCompleteService implements CuisineService {
     }
 
     @Override
-    public boolean ajouterExtras(String itemType, boolean extraFromage, boolean epice) {
-        System.out.println("Cuisine: ajout d'extras pour le plat %s: epice (%s), fromage (%s)".formatted(itemType,
-                epice ? "o" : "n", extraFromage ? "o" : "n"));
+    public boolean ajouterExtras(String itemType, Map<FoodOptionType, String> options) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cuisine : ajout d'extras pour le plat ").append(itemType).append(": ");
+        options.forEach((key, value) -> sb.append(key.name().toLowerCase()).append(" (").append(value).append("), "));
+        if (!options.isEmpty()) {
+            sb.setLength(sb.length() - 2);
+        }
+        System.out.println(sb.toString());
         return true;
     }
 }

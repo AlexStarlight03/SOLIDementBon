@@ -1,6 +1,10 @@
 
 package ca.qc.cmaisonneuve.amp.projet.foodtruck.cuisine;
 
+import java.util.Map;
+
+import ca.qc.cmaisonneuve.amp.projet.foodtruck.food.FoodOptionType;
+
 /**
  * Implémentation de CuisineService représentant une station froide,
  * c'est-à-dire une mini-cuisine qui ne peut qu'assembler des plats froids (pas
@@ -10,18 +14,11 @@ package ca.qc.cmaisonneuve.amp.projet.foodtruck.cuisine;
  * ainsi de libérer de l'espace dans la cuisine principale et de traiter plus de
  * commandes en parallèle.
  */
-public class CuisineFroideService implements CuisineService {
-
-    @Override
-    public boolean cuire(String itemType) {
-        throw new UnsupportedOperationException(
-                "Cuisine froide: Impossible de cuire le plat %s: grill non disponible!".formatted(itemType));
-    }
+public class CuisineFroideService implements AssemblageService {
 
     @Override
     public boolean assembler(String itemType) {
-        System.out
-                .println("Cuisine froide: plat %s assemble".formatted(itemType));
+        System.out.println("Cuisine froide: plat %s assemble".formatted(itemType));
         return true;
     }
 
@@ -32,16 +29,14 @@ public class CuisineFroideService implements CuisineService {
     }
 
     @Override
-    public boolean garderAuChaud(String itemType) {
-        throw new UnsupportedOperationException(
-                "Cuisine froide: Impossible de garder le plat %s au chaud: rechaud non disponible!"
-                        .formatted(itemType));
-    }
-
-    @Override
-    public boolean ajouterExtras(String itemType, boolean extraFromage, boolean epice) {
-        System.out.println("Cuisine froide: ajout d'extras pour le plat %s: epice (%s), fromage (%s)"
-                .formatted(itemType, epice ? "o" : "n", extraFromage ? "o" : "n"));
+    public boolean ajouterExtras(String itemType, Map<FoodOptionType, String> options) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cuisine froide: ajout d'extras pour le plat ").append(itemType).append(": ");
+        options.forEach((key, value) -> sb.append(key.name().toLowerCase()).append(" (").append(value).append("), "));
+        if (!options.isEmpty()) {
+            sb.setLength(sb.length() - 2);
+        }
+        System.out.println(sb.toString());
         return true;
     }
 }
